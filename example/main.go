@@ -145,7 +145,7 @@ func topicExample() {
 	}
 	if err := consumer2.Consume(func(d rabbitmq.Delivery) {
 		fmt.Println("Topic consumer2:", string(d.Body))
-
+		d.Ack(true)
 	}, false, 0); err != nil {
 		panic(err)
 	}
