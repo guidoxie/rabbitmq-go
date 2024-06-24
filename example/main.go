@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	rabbitmq "github.com/guidoxie/rabbitmq-go"
-	amqp "github.com/rabbitmq/amqp091-go"
 	"time"
 )
 
@@ -44,7 +43,7 @@ func directExample() {
 	if err != nil {
 		panic(err)
 	}
-	if err := consumer.Consume(func(d amqp.Delivery) {
+	if err := consumer.Consume(func(d rabbitmq.Delivery) {
 		fmt.Println("Direct consumer1:", string(d.Body))
 	}, true, 0); err != nil {
 		panic(err)
@@ -53,7 +52,7 @@ func directExample() {
 	if err != nil {
 		panic(err)
 	}
-	if err := consumer2.Consume(func(d amqp.Delivery) {
+	if err := consumer2.Consume(func(d rabbitmq.Delivery) {
 		fmt.Println("Direct consumer2:", string(d.Body))
 		d.Ack(true)
 	}, false, 0); err != nil {
@@ -88,7 +87,7 @@ func fanoutExample() {
 	if err != nil {
 		panic(err)
 	}
-	if err := consumer.Consume(func(d amqp.Delivery) {
+	if err := consumer.Consume(func(d rabbitmq.Delivery) {
 		fmt.Println("Fanout consumer1:", string(d.Body))
 	}, true, 0); err != nil {
 		panic(err)
@@ -97,7 +96,7 @@ func fanoutExample() {
 	if err != nil {
 		panic(err)
 	}
-	if err := consumer2.Consume(func(d amqp.Delivery) {
+	if err := consumer2.Consume(func(d rabbitmq.Delivery) {
 		fmt.Println("Fanout consumer2:", string(d.Body))
 		d.Ack(true)
 	}, false, 0); err != nil {
@@ -135,7 +134,7 @@ func topicExample() {
 	if err != nil {
 		panic(err)
 	}
-	if err := consumer.Consume(func(d amqp.Delivery) {
+	if err := consumer.Consume(func(d rabbitmq.Delivery) {
 		fmt.Println("Topic consumer1:", string(d.Body))
 	}, true, 0); err != nil {
 		panic(err)
@@ -144,9 +143,9 @@ func topicExample() {
 	if err != nil {
 		panic(err)
 	}
-	if err := consumer2.Consume(func(d amqp.Delivery) {
+	if err := consumer2.Consume(func(d rabbitmq.Delivery) {
 		fmt.Println("Topic consumer2:", string(d.Body))
-		d.Ack(true)
+
 	}, false, 0); err != nil {
 		panic(err)
 	}

@@ -12,6 +12,6 @@ type Producer interface {
 
 // Consumer 消费者
 type Consumer interface {
-	Consume(f func(d amqp.Delivery), autoAck bool, prefetchCount int) error // 接收信息
+	Consume(f func(d Delivery), autoAck bool, prefetchCount int) error // 接收信息
 	GetQueue() string
 }

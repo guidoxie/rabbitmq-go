@@ -71,12 +71,18 @@ func (w *worker) Publish(msg interface{}, headers amqp.Table, routingKey ...stri
 	return err
 }
 
+type Delivery struct {
+	amqp.Delivery
+}
+
 // prefactchCount: 控制channel上未进行ack点最大消息数量上限制,autoAck 为false时生效
-func (w *worker) Consume(handler func(d amqp.Delivery), autoAck bool, prefetchCount int) error {
+func (w *worker) Consume(handler func(d Delivery), autoAck bool, prefetchCount int) error {
 	w.consumeHandler = &consumeHandler{
 		prefetchCount: prefetchCount,
 		autoAck:       autoAck,
-		handler:       handler,
+		handler: func(d amqp.Delivery) {
+			handler(Delivery{d})
+		},
 	}
 	return w.registerConsume()
 }
