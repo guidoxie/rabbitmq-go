@@ -8,18 +8,13 @@ import (
 
 func main() {
 	fanoutExample()
-	directExample()
-	topicExample()
+	//directExample()
+	//topicExample()
 	select {}
 }
 
 func directExample() {
-	conn, err := rabbitmq.NewConn(rabbitmq.ConnOption{
-		Url:               "amqp://guest:guest@127.0.0.1:5672/",
-		Prefix:            "test",
-		ReconnectInterval: 2 * time.Second,
-		MaxReconnect:      10,
-	})
+	conn, err := rabbitmq.NewConn("amqp://guest:guest@127.0.0.1:5672/", rabbitmq.WithChannelReconnectInterval(1*time.Second))
 	if err != nil {
 		panic(err)
 	}
@@ -61,12 +56,7 @@ func directExample() {
 }
 
 func fanoutExample() {
-	conn, err := rabbitmq.NewConn(rabbitmq.ConnOption{
-		Url:               "amqp://guest:guest@127.0.0.1:5672/",
-		Prefix:            "test",
-		ReconnectInterval: 2 * time.Second,
-		MaxReconnect:      10,
-	})
+	conn, err := rabbitmq.NewConn("amqp://guest:guest@127.0.0.1:5672/")
 	if err != nil {
 		panic(err)
 	}
@@ -98,19 +88,16 @@ func fanoutExample() {
 	}
 	if err := consumer2.Consume(func(d rabbitmq.Delivery) {
 		fmt.Println("Fanout consumer2:", string(d.Body))
-		d.Ack(true)
+		if err := d.Ack(false); err != nil {
+			panic(err)
+		}
 	}, false, 0); err != nil {
 		panic(err)
 	}
 }
 
 func topicExample() {
-	conn, err := rabbitmq.NewConn(rabbitmq.ConnOption{
-		Url:               "amqp://guest:guest@127.0.0.1:5672/",
-		Prefix:            "test",
-		ReconnectInterval: 2 * time.Second,
-		MaxReconnect:      10,
-	})
+	conn, err := rabbitmq.NewConn("amqp://guest:guest@127.0.0.1:5672/")
 	if err != nil {
 		panic(err)
 	}
