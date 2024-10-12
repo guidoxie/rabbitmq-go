@@ -3,7 +3,6 @@ package rabbitmq_go
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	amqp "github.com/rabbitmq/amqp091-go"
 	"sync"
 	"time"
@@ -111,7 +110,6 @@ func (w *worker) registerConsume() error {
 			}
 		}()
 		defer func() {
-			fmt.Println("exist")
 			c := w.checkoutChannel()
 			if !c.IsClosed() {
 				c.Close()

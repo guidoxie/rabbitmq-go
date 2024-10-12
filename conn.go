@@ -37,6 +37,12 @@ func WithConnMaxReconnect(mr int) Option {
 	}
 }
 
+func WithConnLog(log Logger) Option {
+	return func(conn *Conn) {
+		conn.log = log
+	}
+}
+
 func NewConn(url string, opts ...Option) (*Conn, error) {
 	connect, err := amqp.Dial(url) // 创建连接
 	if err != nil {
